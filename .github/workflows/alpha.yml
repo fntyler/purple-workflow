@@ -68,12 +68,16 @@ jobs:
           TAGS: ${{ steps.docker-meta.outputs.tags }}
           WORKFLOW_NAME: alpha.yml
           REF: ${{ github.ref }}
+          COSIGN_REGISTRY: ghcr.io/${{ env._USERNAME }}/${{ env._REPOSITORY_NAME }}
         run: |
           images=""
           for tag in ${TAGS}; do
             images+="${tag}@${DIGEST} "
           done
-          cosign sign --yes ${images}
+          echo "Signing images: ${images}"
+          cosign sign --yes --registry-referrers-mode=legacy ${images}
+          echo "Verification starting..."
           cosign verify ${images} \
           --certificate-identity="https://github.com/${USERNAME}/${REPOSITORY_NAME}/.github/workflows/${WORKFLOW_NAME}@${REF}" \
           --certificate-oidc-issuer=https://token.actions.githubusercontent.com
+          echo "Verification completed successfully"
