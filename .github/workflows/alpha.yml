@@ -46,7 +46,7 @@ jobs:
         uses: docker/metadata-action@v5
         id: docker-meta
         with:
-          images: ghcr.io/fntyler/purple-workflow
+          images: ghcr.io/${{ env._USERNAME }}/${{ env._REPOSITORY_NAME }}
           tags: |
             type=ref,event=branch
             type=sha
