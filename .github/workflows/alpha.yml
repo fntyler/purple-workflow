@@ -46,8 +46,10 @@ jobs:
         uses: docker/metadata-action@v5
         id: docker-meta
         with:
-          images: ghcr.io/${{ env._USERNAME }}/${{ env._REPOSITORY_NAME }}
-          tags: type=sha,format=long
+          images: ghcr.io/fntyler/purple-workflow
+          tags: |
+            type=ref,event=branch
+            type=sha
 
       - name: Build and Push container images
         uses: docker/build-push-action@v6.18.0
