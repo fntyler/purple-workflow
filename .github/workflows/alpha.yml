@@ -1,0 +1,77 @@
+name: alpha
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+
+permissions: {}
+
+jobs:
+  build-image:
+    name: Build image
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    env:
+      _NAME: fntyler
+      _REPOSITORY_NAME: purple-workflow
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v4.0.0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.11.1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set metadata
+        uses: docker/metadata-action@5.8.0
+        id: docker-meta
+        with:
+          images: ghcr.io/${{ env._USERNAME }}/${{ env._REPOSITORY_NAME }}
+          tags: type=sha,format=long
+
+      - name: Build and Push container images
+        uses: docker/build-push-action@v6.18.0
+        id: build-and-push
+        with:
+          platforms: linux/amd64,linux/arm64
+          file: docker/Dockerfile
+          push: true
+          tags: ${{ steps.docker-meta.outputs.tags }}
+
+      - name: Sign and verify the images with GitHub OIDC Token
+        env:
+          USERNAME: ${{ env._USERNAME }}
+          REPOSITORY_NAME: ${{ env._REPOSITORY_NAME }}
+          DIGEST: ${{ steps.build-and-push.outputs.digest }}
+          TAGS: ${{ steps.docker-meta.outputs.tags }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          REF: ${{ github.ref }}
+        run: |
+          images=""
+          for tag in ${TAGS}; do
+            images+="${tag}@${DIGEST} "
+          done
+          cosign sign --yes ${images}
+          cosign verify ${images} \
+          --certificate-identity="https://github.com/${USERNAME}/${REPOSITORY_NAME}/.github/workflows/${WORKFLOW_NAME}@${REF}" \
+          --certificate-oidc-issuer=https://token.actions.githubusercontent.com
