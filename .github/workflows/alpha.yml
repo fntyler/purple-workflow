@@ -75,7 +75,7 @@ jobs:
             images+="${tag}@${DIGEST} "
           done
           echo "Signing images: ${images}"
-          cosign sign --yes --registry-referrers-mode=legacy ${images}
+          cosign sign --yes ${images}
           echo "Verification starting..."
           cosign verify ${images} \
           --certificate-identity="https://github.com/${USERNAME}/${REPOSITORY_NAME}/.github/workflows/${WORKFLOW_NAME}@${REF}" \
