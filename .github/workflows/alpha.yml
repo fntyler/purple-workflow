@@ -43,7 +43,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set metadata
-        uses: docker/metadata-action@5.8.0
+        uses: docker/metadata-action@5.10.0
         id: docker-meta
         with:
           images: ghcr.io/${{ env._USERNAME }}/${{ env._REPOSITORY_NAME }}
