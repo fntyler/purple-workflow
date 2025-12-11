@@ -66,7 +66,7 @@ jobs:
           REPOSITORY_NAME: ${{ env._REPOSITORY_NAME }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
           TAGS: ${{ steps.docker-meta.outputs.tags }}
-          WORKFLOW_NAME: alpha
+          WORKFLOW_NAME: alpha.yml
           REF: ${{ github.ref }}
         run: |
           images=""
