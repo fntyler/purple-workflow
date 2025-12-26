@@ -82,6 +82,7 @@ jobs:
           compression-level: 0
 
       - name: Sign and verify the images with GitHub OIDC Token
+        if: github.ref == 'refs/heads/main'
         env:
           USERNAME: ${{ env._USERNAME }}
           REPOSITORY_NAME: ${{ env._REPOSITORY_NAME }}
