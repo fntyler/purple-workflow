@@ -60,7 +60,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: docker/Dockerfile
           push: true
-          outputs: type=docker,dest=purple-workflow-${{ github.sha }}.tar
+          outputs: type=oci,dest=purple-workflow-${{ github.sha }}.tar
           tags: ${{ steps.docker-meta.outputs.tags }}
 
       - name: Debug
