@@ -60,7 +60,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: docker/Dockerfile
           push: true
-          outputs: type=oci,dest=- . > purple-workflow-img.tar
+          outputs: type=oci,dest=purple-workflow-img.tar
           tags: ${{ steps.docker-meta.outputs.tags }}
 
       - name: Debug
