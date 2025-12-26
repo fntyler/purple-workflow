@@ -60,12 +60,22 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: docker/Dockerfile
           push: true
-          outputs: type=oci,dest=purple-workflow-img.tar
+          outputs: type=oci,dest=purple-workflow-${{ github.sha }}.tar
           tags: ${{ steps.docker-meta.outputs.tags }}
 
       - name: Debug
         run: |
           ls -la
+
+      - name: Upload tarball as artifact
+        id: artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: purple-workflow-${{ github.sha }}.tar
+          path: ./
+          if-no-files-found: warn
+          retention-days: 7
+          compression-level: 9
 
       - name: Sign and verify the images with GitHub OIDC Token
         env:
