@@ -63,7 +63,7 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           file: docker/Dockerfile
-          push: true
+          push: ${{ github.ref == 'refs/heads/main' }}
           outputs: type=oci,dest=purple-workflow-${{ github.sha }}.tar
           tags: ${{ steps.docker-meta.outputs.tags }}
 
