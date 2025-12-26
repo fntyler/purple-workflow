@@ -60,7 +60,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: docker/Dockerfile
           push: true
-          outputs: type=docker,dest=./
+          outputs: type=docker,dest=./output
           tags: ${{ steps.docker-meta.outputs.tags }}
 
       - name: Debug
