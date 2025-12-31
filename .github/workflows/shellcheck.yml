@@ -1,0 +1,25 @@
+name: ShellCheck
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  build-image:
+    name: Lint
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Debug
+        run: |
+          which shellcheck
