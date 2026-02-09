@@ -1,0 +1,28 @@
+name: post-package
+
+on:
+  workflow_dispatch:
+  registry_package:
+    types: [published]
+
+permissions: {}
+
+jobs:
+  noop:
+    name: NoOp
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      _USERNAME: fntyler
+      _REPOSITORY_NAME: purple-workflow
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Run command
+        run: |
+          echo "${{ github.event.package.name }}"
