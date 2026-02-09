@@ -50,8 +50,6 @@ jobs:
         id: docker-meta
         with:
           images: ghcr.io/${{ env._USERNAME }}/${{ env._REPOSITORY_NAME }}
-          flavor: |
-            latest=true
           tags: |
             type=ref,event=branch
             type=ref,event=pr
