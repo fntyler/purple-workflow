@@ -5,6 +5,9 @@ on:
   pull_request:
     branches:
       - "main"
+  push:
+    branches:
+      - "main"
 
 permissions: {}
 
@@ -104,3 +107,49 @@ jobs:
           --certificate-identity="https://github.com/${USERNAME}/${REPOSITORY_NAME}/.github/workflows/${WORKFLOW_NAME}@${REF}" \
           --certificate-oidc-issuer=https://token.actions.githubusercontent.com
           echo "Verification completed successfully"
+
+  tag:
+    name: Generate tag
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Calculate next version
+        id: version
+        run: |
+          BASE_VERSION=$(grep -m1 '^version' pyproject.toml | sed 's/.*"\(.*\)".*/\1/')
+          MAJOR_MINOR="${BASE_VERSION%.*}"
+
+          echo "Base version from pyproject.toml: ${BASE_VERSION}"
+          echo "Major.Minor prefix: ${MAJOR_MINOR}"
+
+          LATEST_PATCH=$(
+            git tag --list "v${MAJOR_MINOR}.*" \
+              | sed "s/^v${MAJOR_MINOR}\.//" \
+              | sort -n \
+              | tail -1
+          )
+
+          if [ -z "${LATEST_PATCH}" ]; then
+            NEXT_PATCH=0
+          else
+            NEXT_PATCH=$((LATEST_PATCH + 1))
+          fi
+
+          PREVIOUS_VERSION="${MAJOR_MINOR}.${LATEST_PATCH}"
+          NEXT_VERSION="${MAJOR_MINOR}.${NEXT_PATCH}"
+          echo "Previous version: v${PREVIOUS_VERSION}"
+          echo "Next version: v${NEXT_VERSION}"
+          echo "tag=v${NEXT_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Create and push git tag
+        run: |
+          git tag "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
