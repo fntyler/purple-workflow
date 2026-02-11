@@ -47,7 +47,6 @@ jobs:
           tags: |
             type=ref,event=pr
             type=ref,event=tag
-            type=sha
 
       - name: Build and Push container images
         uses: docker/build-push-action@v6.18.0
@@ -62,7 +61,7 @@ jobs:
         run: |
           echo "github sha: ${{ github.sha }}"
           echo "github ref: ${{ github.ref }}"
-          echo "github event: ${{ github.event }}"
+          echo "github event: ${{ github.event.ref }}"
           echo "github event_name: ${{ github.event_name }}"
           echo "github event_path: ${{ github.event_path }}"
 
