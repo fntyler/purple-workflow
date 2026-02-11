@@ -2,9 +2,6 @@ name: alpha
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "main"
   pull_request:
     branches:
       - "main"
@@ -51,8 +48,8 @@ jobs:
         with:
           images: ghcr.io/${{ env._USERNAME }}/${{ env._REPOSITORY_NAME }}
           tags: |
-            type=ref,event=branch
             type=ref,event=pr
+            type=ref,event=tag
             type=sha
 
       - name: Build and Push container images
