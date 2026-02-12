@@ -52,6 +52,7 @@ jobs:
           images: ghcr.io/${{ env._USERNAME }}/${{ env._REPOSITORY_NAME }}
           tags: |
             type=ref,event=pr
+            type=ref,event=branch
             type=raw,value={{branch}}-{{sha}},enable=${{ github.ref == 'refs/heads/main' }}
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
@@ -64,6 +65,7 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' }}
           outputs: type=oci,dest=purple-workflow-${{ github.sha }}.tar
           tags: ${{ steps.docker-meta.outputs.tags }}
+          labels: ${{ steps.docker-meta.outputs.labels }}
 
       - name: Debug
         run: |
