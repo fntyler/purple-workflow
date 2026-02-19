@@ -69,6 +69,8 @@ jobs:
           labels: ${{ steps.docker-meta.outputs.labels }}
 
       - name: Debug
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           ls -la
           echo "github sha: ${{ github.sha }}"
