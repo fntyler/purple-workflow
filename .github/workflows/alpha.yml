@@ -53,6 +53,7 @@ jobs:
           tags: |
             type=ref,event=pr
             type=ref,event=branch
+            type=ref,event=tag
             type=raw,value={{branch}}-{{sha}},enable=${{ github.ref == 'refs/heads/main' }}
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
@@ -75,6 +76,10 @@ jobs:
           echo "github event: ${{ github.event.ref }}"
           echo "github event_name: ${{ github.event_name }}"
           echo "github event_path: ${{ github.event_path }}"
+
+          echo "github job id: ${{ github.job }}"
+          echo "github run id: ${{ github.run_id }}"
+
 
 
       - name: Upload tarball as artifact
