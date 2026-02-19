@@ -82,7 +82,7 @@ jobs:
           echo "github job (job name): ${{ github.job }}"
           echo "github run id: ${{ github.run_id }}"
 
-          job_id=$(gh api repos/fntyler/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs)
+          job_id=$(gh api repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs)
             #--jq '.jobs[] | select(.name == "${{ github.job }}") | .id')
           echo "Github API job id: $job_id"
 
