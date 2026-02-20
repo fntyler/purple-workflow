@@ -89,7 +89,7 @@ jobs:
 
           echo "Docker imageid: ${{ steps.build-and-push.outputs.imageid }}"
           echo "Docker digest: ${{ steps.build-and-push.outputs.digest }}"
-          echo "Docker metadata: ${{ steps.build-and-push.outputs.metadata }}"
+          echo "Docker metadata: ${{ steps.build-and-push.outputs.metadata }} > docker.metadata.json"
 
 
 
@@ -98,6 +98,16 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: purple-workflow-${{ github.sha }}.tar
+          path: ./
+          if-no-files-found: warn
+          retention-days: 7
+          compression-level: 0
+
+      - name: Upload tarball as artifact
+        id: metadata-artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: docker.metadata.json
           path: ./
           if-no-files-found: warn
           retention-days: 7
