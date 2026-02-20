@@ -87,10 +87,16 @@ jobs:
             #--jq '.jobs[].id'
           echo "Github API job id: $job_id"
 
+          echo "Docker metadata version: ${{ steps.build-and-push.outputs.version }}"
+          echo "Docker metadata tags: ${{ steps.build-and-push.outputs.tags }}"
+          echo "Docker metadata tag-names: ${{ steps.build-and-push.outputs.tag-names }}"
+          echo "Docker metadata labels: ${{ steps.build-and-push.outputs.labels }}"
+          echo "Docker metadata annotations: ${{ steps.build-and-push.outputs.annotations }}"
+          echo "Docker metadata json: ${{ steps.build-and-push.outputs.json }}"
+
           echo "Docker imageid: ${{ steps.build-and-push.outputs.imageid }}"
           echo "Docker digest: ${{ steps.build-and-push.outputs.digest }}"
           echo "Docker metadata: ${{ steps.build-and-push.outputs.metadata }}" > docker.metadata.json
-
 
 
       - name: Upload tarball as artifact
