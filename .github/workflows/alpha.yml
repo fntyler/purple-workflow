@@ -94,6 +94,9 @@ jobs:
           echo "Docker metadata annotations: ${{ steps.docker-meta.outputs.annotations }}"
           echo "Docker metadata json: ${{ steps.docker-meta.outputs.json }}"
 
+          echo "Docker metadata json parsed: ${{ fromJSON(steps.docker-meta.outputs.json).labels }}"
+          echo "Docker metadata json parsed: ${{ fromJSON(steps.docker-meta.outputs.json).tag-names }}"
+
           echo "Docker imageid: ${{ steps.build-and-push.outputs.imageid }}"
           echo "Docker digest: ${{ steps.build-and-push.outputs.digest }}"
           echo "Docker metadata: ${{ steps.build-and-push.outputs.metadata }}" > docker.metadata.json
