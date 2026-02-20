@@ -103,9 +103,9 @@ jobs:
           echo "Docker metadata: ${{ steps.build-and-push.outputs.metadata }}" > docker.metadata.json
 
           echo "Docker metadata json env:"
-          echo "$DOCKER_META_JSON" | jq '.'
-          echo "$DOCKER_META_JSON" | jq -r '.tags[]'
-          echo "$DOCKER_META_JSON" | jq -r '.labels | to_entries[] | "\(.key)=\(.value)"'
+          echo "$DOCKER_METADATA_OUTPUT_JSON" | jq '.'
+          echo "$DOCKER_METADATA_OUTPUT_JSON" | jq -r '.tags[]'
+          echo "$DOCKER_METADATA_OUTPUT_JSON" | jq -r '.labels | to_entries[] | "\(.key)=\(.value)"'
 
 
       - name: Upload tarball as artifact
