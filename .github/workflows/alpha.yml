@@ -71,6 +71,7 @@ jobs:
       - name: Debug
         env:
           GH_TOKEN: ${{ github.token }}
+          DOCKER_METADATA_OUTPUT_JSON: ${{ steps.docker-meta.outputs.json }}
         run: |
           ls -la
           echo "github sha: ${{ github.sha }}"
@@ -100,6 +101,11 @@ jobs:
           echo "Docker imageid: ${{ steps.build-and-push.outputs.imageid }}"
           echo "Docker digest: ${{ steps.build-and-push.outputs.digest }}"
           echo "Docker metadata: ${{ steps.build-and-push.outputs.metadata }}" > docker.metadata.json
+
+          echo "Docker metadata json env:"
+          echo "$DOCKER_META_JSON" | jq '.'
+          echo "$DOCKER_META_JSON" | jq -r '.tags[]'
+          echo "$DOCKER_META_JSON" | jq -r '.labels | to_entries[] | "\(.key)=\(.value)"'
 
 
       - name: Upload tarball as artifact
