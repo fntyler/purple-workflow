@@ -89,7 +89,7 @@ jobs:
 
           echo "Docker imageid: ${{ steps.build-and-push.outputs.imageid }}"
           echo "Docker digest: ${{ steps.build-and-push.outputs.digest }}"
-          echo "Docker metadata: ${{ steps.build-and-push.outputs.metadata }} > docker.metadata.json"
+          echo "Docker metadata: ${{ steps.build-and-push.outputs.metadata }}" > docker.metadata.json
 
 
 
